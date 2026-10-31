@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { TriangleAlert } from "lucide-react";
+import { TriangleAlert, ShieldAlert, ShieldCheck } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AccordionApp } from "@/components/card-split-accordian";
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
@@ -14,12 +15,23 @@ type Result = {
   links: string[];
 };
 
-const bannerStyle = (level: string) =>
+const alertLook = (level: string) =>
   level === "HIGH RISK"
-    ? "border-red-500/40 bg-red-500/10"
+    ? { style: "bg-red-700", Icon: ShieldAlert }
     : level === "SUSPICIOUS"
-      ? "border-amber-500/40 bg-amber-500/10"
-      : "border-emerald-500/40 bg-emerald-500/10";
+      ? { style: "bg-amber-700", Icon: TriangleAlert }
+      : { style: "bg-green-700", Icon: ShieldCheck };
+
+function ResultAlert({ level, advice }: { level: string; advice: string }) {
+  const { style, Icon } = alertLook(level);
+  return (
+    <Alert className={`border-none text-white ${style}`}>
+      <Icon className="size-4" />
+      <AlertTitle>{level}</AlertTitle>
+      <AlertDescription className="text-white/80">{advice}</AlertDescription>
+    </Alert>
+  );
+}
 
 const barColour = (level: string) =>
   level === "HIGH RISK"
@@ -162,10 +174,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className={`rounded-lg border p-4 ${bannerStyle(result.level)}`}>
-            <p className="font-semibold">{result.level}</p>
-            <p className="mt-1">{result.advice}</p>
-          </div>
+          <ResultAlert level={result.level} advice={result.advice} />
 
           {result.notes.map((note, i) => (
             <div
