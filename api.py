@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -7,9 +8,11 @@ from phish import analyse  # your existing detection code, unchanged
 app = FastAPI(title="Phishing Message Checker API")
 
 # Add your deployed frontend URL here once you have one
+ALLOWED = os.environ.get("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=ALLOWED,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
