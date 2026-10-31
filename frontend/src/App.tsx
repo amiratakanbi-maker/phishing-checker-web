@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { TriangleAlert, ShieldAlert, ShieldCheck } from "lucide-react";
+import { TriangleAlert, ShieldAlert, ShieldCheck, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AccordionApp } from "@/components/card-split-accordian";
 
@@ -137,20 +138,14 @@ export default function App() {
       />
 
       <div className="mt-4 flex gap-3">
-        <button
-          onClick={check}
-          disabled={loading}
-          className="rounded-lg bg-primary px-5 py-2 font-medium text-primary-foreground disabled:opacity-60"
-        >
-          {loading ? "Checking…" : "Check message"}
-        </button>
-        <button
-          onClick={clearAll}
-          className="rounded-lg border border-border px-5 py-2"
-        >
-          Clear
-        </button>
-      </div>
+  <Button size="lg" onClick={check} disabled={loading}>
+    {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
+    {loading ? "Checking…" : "Check message"}
+  </Button>
+  <Button size="lg" variant="outline" onClick={clearAll}>
+    Clear
+  </Button>
+</div>
 
       {error && (
         <div
